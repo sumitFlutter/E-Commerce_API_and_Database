@@ -6,8 +6,10 @@ $stock=$_POST['stock'];
 $description=$_POST['description'];
 $category=$_POST['category'];
 $name=$_POST['name'];
-$insert="INSERT INTO `product_admin`(`owner`, `price`,`stock`,`description`,`category`,`name`) VALUES ('$owner','$price','$stock','$description','$category','$name')";
-if($owner !=null && $price !=null && $stock!=null && $description!=null && $category!=null && $name!=null){
+$image=$_POST["image_link"];
+$mainCategory=$_POST["sub_category"];
+$insert="INSERT INTO `product_admin`(`owner`, `price`,`stock`,`description`,`category`,`name`,`image_link`,`main_category`) VALUES ('$owner','$price','$stock','$description','$category','$name','$image','$mainCategory')";
+if($owner !=null && $price !=null && $stock!=null && $description!=null && $category!=null && $name!=null && $image!=null && $mainCategory !=null){
 $a=mysqli_query($conn,$insert); 
 if($a)
 {
