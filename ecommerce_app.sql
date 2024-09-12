@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2024 at 06:15 AM
+-- Generation Time: Sep 12, 2024 at 10:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecommerce_app`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `address`
+--
+
+CREATE TABLE `address` (
+  `id` int(100) NOT NULL,
+  `uID` int(100) NOT NULL,
+  `name` text NOT NULL,
+  `mobile` text NOT NULL,
+  `street` text NOT NULL,
+  `landmark` text NOT NULL,
+  `state` text NOT NULL,
+  `city` text NOT NULL,
+  `pincode` int(100) NOT NULL,
+  `type` tinyint(1) NOT NULL,
+  `priority` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -41,12 +61,26 @@ CREATE TABLE `category` (
 
 CREATE TABLE `product_admin` (
   `id` int(100) NOT NULL,
+  `main_category` int(100) NOT NULL,
   `category` int(100) NOT NULL,
   `name` text NOT NULL,
   `description` text NOT NULL,
   `stock` int(100) NOT NULL,
   `price` int(100) NOT NULL,
-  `owner` int(100) NOT NULL
+  `owner` int(100) NOT NULL,
+  `image_link` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_image`
+--
+
+CREATE TABLE `product_image` (
+  `id` int(100) NOT NULL,
+  `product` int(100) NOT NULL,
+  `image_link` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -106,6 +140,13 @@ CREATE TABLE `user` (
 --
 
 --
+-- Indexes for table `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userID` (`uID`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -118,7 +159,15 @@ ALTER TABLE `category`
 ALTER TABLE `product_admin`
   ADD PRIMARY KEY (`id`),
   ADD KEY `owner` (`owner`),
-  ADD KEY `cate` (`category`);
+  ADD KEY `sub_cate` (`category`),
+  ADD KEY `main_cate` (`main_category`);
+
+--
+-- Indexes for table `product_image`
+--
+ALTER TABLE `product_image`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_images` (`product`);
 
 --
 -- Indexes for table `product_user`
@@ -153,6 +202,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `address`
+--
+ALTER TABLE `address`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
@@ -162,6 +217,12 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `product_admin`
 --
 ALTER TABLE `product_admin`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_image`
+--
+ALTER TABLE `product_image`
   MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 
 --
@@ -193,6 +254,12 @@ ALTER TABLE `user`
 --
 
 --
+-- Constraints for table `address`
+--
+ALTER TABLE `address`
+  ADD CONSTRAINT `userID` FOREIGN KEY (`uID`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `category`
 --
 ALTER TABLE `category`
@@ -202,8 +269,15 @@ ALTER TABLE `category`
 -- Constraints for table `product_admin`
 --
 ALTER TABLE `product_admin`
-  ADD CONSTRAINT `cate` FOREIGN KEY (`category`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `owner` FOREIGN KEY (`owner`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `main_cate` FOREIGN KEY (`main_category`) REFERENCES `sub-category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `owner` FOREIGN KEY (`owner`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sub_cate` FOREIGN KEY (`category`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `product_image`
+--
+ALTER TABLE `product_image`
+  ADD CONSTRAINT `product_images` FOREIGN KEY (`product`) REFERENCES `product_admin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `product_user`
