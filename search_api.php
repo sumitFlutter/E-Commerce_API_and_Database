@@ -2,8 +2,8 @@
 include("conn.php");
 header('Content-type: application/json');
 $search=$_GET["search"];
-$table=`product_admin`;
-$column=`name`;
+$table="product_admin";
+$column="name";
 $query ="SELECT * FROM $table WHERE $column LIKE '%$search%'";
 $arr=array();
 if($search !=null)
@@ -19,7 +19,7 @@ if($search !=null)
             echo $json;
     }
     else{
-        $table=`user`;
+        $table="user";
         $two=$mysqli_query($conn,$query);
         if(mysqli_num_rows($two)!=0)
         {
@@ -31,7 +31,7 @@ if($search !=null)
                 echo $json;
         }
         else{
-                $table=`category`;
+                $table="category";
             $three=$mysqli_query($conn,$query);
             if(mysqli_num_rows($three)!=0)
             {
@@ -43,7 +43,7 @@ if($search !=null)
                     echo $json;
             }
             else{
-                        $table=`sub-category`;
+                        $table="sub-category";
                 $four=$mysqli_query($conn,$query);
                 if(mysqli_num_rows($four)!=0)
                 {
