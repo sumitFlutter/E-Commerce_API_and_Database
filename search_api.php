@@ -4,7 +4,7 @@ header('Content-type: application/json');
 $search=$_GET["search"];
 $table=`product_admin`;
 $column=`name`;
-$query ="SELECT * FROM $table WHERE $column LIKE '$search'";
+$query ="SELECT * FROM $table WHERE $column LIKE '%$search%'";
 $arr=array();
 if($search !=null)
 {
